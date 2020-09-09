@@ -6,10 +6,39 @@ class HashTableEntry:
         self.key = key
         self.value = value
         self.next = None
+        
 
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+        
+    def add_to_tail(self, key, value):
+        temp = self.head
+        self.head = HashTableEntry(key,value)
+        self.head.next = temp
+        
+    def find(self, key):
+        temp = self.head
+        while temp is not None:
+            if key == temp.key:
+                return temp.value
+            else:
+                temp = temp.next
+                
+    def delete(self, key):
+        temp = self.head
+        while temp is not None:
+            if key == temp.key:
+                temp.value = None
+                return
+            else:
+                temp = temp.next
+        
+        
 
 
 class HashTable:
@@ -26,7 +55,8 @@ class HashTable:
         else:
             self.capacity = capacity
             
-        self.storage = [None] * capacity
+        self.storage = [LinkedList()] * capacity
+
 
 
     def get_num_slots(self):
@@ -74,7 +104,6 @@ class HashTable:
             hash = (hash * 33) + ord(s)
         return hash 
 
-
     def hash_index(self, key):
         """
         Take an arbitrary key and return a valid integer index
@@ -84,9 +113,23 @@ class HashTable:
         return self.djb2(key) % self.capacity
 
     def put(self, key, value):
+        idx = self.hash_index(key) 
         
-        idx = self.hash_index(key)
-        self.storage[idx] = value
+        data_point = self.storage[idx]
+        
+        if data_point is None:
+            data_point = LinkedList()
+
+            data_point.add_to_tail(key,value)
+            self.storage[idx] = data_point
+            
+        else:
+            data_point.add_to_tail(key,value)
+
+            
+
+            
+            
 
 
 
@@ -101,7 +144,10 @@ class HashTable:
         idx = self.hash_index(key)
 
         if idx is not None:
-            self.storage[idx] = None
+            idx = self.hash_index(key)
+            val = self.storage[idx]
+            val.delete(key)
+
         else:
             print("not found")
        
@@ -115,14 +161,31 @@ class HashTable:
 
         Implement this.
         """
-
         if key:
             idx = self.hash_index(key)
             val = self.storage[idx]
-
-            return val
+            found = val.find(key)
+            return found
         else:
-            return None
+            return None 
+        
+        
+        # idx = self.hash_index(key)
+        # data_point = self.storage[idx]
+        
+        # if data_point:
+        #     data_point.find()
+        # else:
+        #     return None
+            
+            
+            
+            
+
+        
+        
+        
+
 
 
     def resize(self, new_capacity):
