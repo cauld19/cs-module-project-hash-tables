@@ -82,7 +82,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        return self.size / self.capacity
 
 
     def fnv1(self, key):
@@ -115,6 +115,11 @@ class HashTable:
         return self.djb2(key) % self.capacity
 
     def put(self, key, value):
+        new_capacity = self.capacity *2
+        
+        if self.get_load_factor() > 0.7:
+            self.resize(new_capacity)
+        
             
         idx = self.hash_index(key) 
         data_point = self.storage[idx]
@@ -160,6 +165,7 @@ class HashTable:
 
         Implement this.
         """
+            
         if key:   
             idx = self.hash_index(key)
             val = self.storage[idx]
