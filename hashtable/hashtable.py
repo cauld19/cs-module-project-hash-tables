@@ -115,8 +115,8 @@ class HashTable:
         return self.djb2(key) % self.capacity
 
     def put(self, key, value):
+            
         idx = self.hash_index(key) 
-        
         data_point = self.storage[idx]
         
         if data_point is None:
@@ -171,20 +171,6 @@ class HashTable:
         else:
             return None 
         
-        
-        # idx = self.hash_index(key)
-        # data_point = self.storage[idx]
-        
-        # if data_point:
-        #     data_point.find()
-        # else:
-        #     return None
-        
-        # load = self.size / self.capacity
-        # print(load)
-        
-        # if load > 0.7:
-        #     newStorage = [LinkedList()] * (self.capacity * 2)
             
 
     def resize(self, new_capacity):
