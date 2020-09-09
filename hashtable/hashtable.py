@@ -55,7 +55,9 @@ class HashTable:
         else:
             self.capacity = capacity
             
-        self.storage = [LinkedList()] * capacity
+        self.storage = [None] * capacity
+        self.size = 0
+        
 
 
 
@@ -122,15 +124,11 @@ class HashTable:
 
             data_point.add_to_tail(key,value)
             self.storage[idx] = data_point
+            self.size += 1
             
         else:
             data_point.add_to_tail(key,value)
-
-            
-
-            
-            
-
+            self.size += 1
 
 
     def delete(self, key):
@@ -147,6 +145,7 @@ class HashTable:
             idx = self.hash_index(key)
             val = self.storage[idx]
             val.delete(key)
+            self.size -= 1
 
         else:
             print("not found")
@@ -161,11 +160,14 @@ class HashTable:
 
         Implement this.
         """
-        if key:
+        if key:   
             idx = self.hash_index(key)
             val = self.storage[idx]
-            found = val.find(key)
-            return found
+            if val is None:
+                pass
+            else:
+                found = val.find(key)
+                return found
         else:
             return None 
         
@@ -177,16 +179,13 @@ class HashTable:
         #     data_point.find()
         # else:
         #     return None
-            
-            
-            
-            
-
         
+        # load = self.size / self.capacity
+        # print(load)
         
-        
-
-
+        # if load > 0.7:
+        #     newStorage = [LinkedList()] * (self.capacity * 2)
+            
 
     def resize(self, new_capacity):
         """
@@ -195,7 +194,25 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+ 
+        self.capacity = new_capacity
+        original_array = self.storage
+        self.storage = [None] * new_capacity
+
+        
+        for lst in original_array:
+            if lst is None:
+                continue
+            else:
+                if lst.head.next is None:
+                    self.put(lst.head.key, lst.head.value)
+                else:
+                    temp = lst.head
+                    while temp.next is not None:
+                        temp = temp.next
+                    self.put(temp.key, temp.value)
+
+                
 
 
 
