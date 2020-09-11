@@ -1,5 +1,21 @@
+import re
+
 def word_count(s):
-    # Your code here
+    cache = {}
+    
+    remove_char = re.sub(r"[^\w']", ' ', s) ## remove all non alphanumeric chcaracters except '
+
+    split_words = remove_char.split(" ") ## split at empty spaces
+    for word in split_words: # iterate through words
+        word = word.lower() #make lowercase
+        if word == "":
+            continue
+        if word not in cache:
+            cache[word] = 1
+        else:  
+            cache[word] += 1
+    return cache
+    
 
 
 
